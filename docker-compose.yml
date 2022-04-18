@@ -1,0 +1,60 @@
+version: "3"  
+services:   
+  nginx:    
+     image: nginx:1.21.1  
+     container_name: php-nginx
+     ports:
+      - "8099:80"
+     volumes:
+      - ./web/:/usr/share/nginx/html/:rw
+      - ./conf/nginx:/etc/nginx/conf.d/
+     environment:
+       TZ: "Asia/Shanghai"
+     restart: always
+     networks:
+      - default
+  php1:
+    image: devilbox/php-fpm:5.4-prod
+    container_name: php54-1
+    volumes:
+      - ./web/project-a/:/var/www/html/:rw
+      - ./conf/php-custom.d:/etc/php-custom.d
+      - ./conf/php-fpm-custom.d:/etc/php-fpm-custom.d
+    environment:
+      TIMEZONE: "Asia/Shanghai"
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+
+  php2:
+    image: devilbox/php-fpm:5.4-prod
+    container_name: php54-2
+    volumes:
+      - ./web/project-b/:/var/www/html/:rw
+      - ./conf/php-custom.d:/etc/php-custom.d
+      - ./conf/php-fpm-custom.d:/etc/php-fpm-custom.d
+    environment:
+      TIMEZONE: "Asia/Shanghai"
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+
+  mysql:
+    image: mysql:5.7
+    container_name: php-mysql57
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql/:rw
+    restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      TZ: "Asia/Shanghai"
+networks:
+  default:
