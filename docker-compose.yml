@@ -4,7 +4,7 @@ services:
      image: nginx:1.21.1  
      container_name: php-nginx
      ports:
-      - "8099:80"
+      - "9999:80"
      volumes:
       - ./web/:/usr/share/nginx/html/:rw
       - ./conf/nginx:/etc/nginx/conf.d/
@@ -47,7 +47,7 @@ services:
     image: mysql:5.7
     container_name: php-mysql57
     ports:
-      - "3308:3306"
+      - "3399:3306"
     volumes:
       - ./mysql/data:/var/lib/mysql/:rw
     restart: always
